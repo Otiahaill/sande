@@ -26,7 +26,9 @@ jobs:
           printf '24333f8a63b6825ea9c5514f83c2829b004d1fee\n' > "$ANDROID_HOME/licenses/android-sdk-license"
 
       - name: Build debug APK
-        run: ./gradlew :app:assembleDebug --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew :app:assembleDebug --no-daemon
 
       - name: Upload APK artifact
         if: success()
