@@ -8,6 +8,7 @@ import com.example.sande.data.daos.MemberDao
 import com.example.sande.data.daos.MovementDao
 import com.example.sande.data.daos.OutboxDao
 import com.example.sande.data.daos.ProductDao
+import com.example.sande.data.daos.SaleHeaderDao
 import com.example.sande.data.entities.Business
 import com.example.sande.data.entities.Member
 import com.example.sande.data.entities.Movement

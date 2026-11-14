@@ -64,7 +64,7 @@ class MovementRepository constructor(
         items: List<SaleLineItem>,
         receiptNumber: String,
         deviceId: String
-    ): String = database.runInTransaction {
+    ): String = database.withTransaction {
         val totalCents = items.sumOf { it.quantity * it.unitPriceCents }
         val saleHeaderId = UUID.randomUUID().toString()
         val saleHeader = SaleHeader(
