@@ -1,0 +1,13 @@
+#!/bin/sh
+# No-op xdg-open stub.
+# The Firebase CLI calls xdg-open to auto-launch the OAuth URL. On Android
+# there is no xdg-open, which made the CLI abort instead of printing the URL.
+# This stub succeeds silently so the CLI prints the URL and waits for the
+# OAuth callback on localhost:9005.
+echo "Open this URL in a browser:" >&2
+for arg in "$@"; do
+  case "$arg" in
+    http*) echo "$arg" >&2 ;;
+  esac
+done
+exit 0

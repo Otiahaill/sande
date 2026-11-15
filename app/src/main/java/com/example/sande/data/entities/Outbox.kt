@@ -13,5 +13,9 @@ data class Outbox(
     val payload: String,
     val createdAt: Long = System.currentTimeMillis(),
     val attempts: Int = 0,
-    val synced: Boolean = false
+    val synced: Boolean = false,
+    /** Explicit sync state; distinguishes "queued locally" from "server accepted". */
+    val syncState: String = "LOCAL_PENDING",
+    /** Set when a conflict needs human review. */
+    val conflictReason: String? = null
 )
