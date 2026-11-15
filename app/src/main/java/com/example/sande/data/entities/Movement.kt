@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("productId"), Index("createdAt"), Index("synced")]
+    indices = [Index("productId"), Index("createdAt"), Index("synced"), Index("businessId")]
 )
 data class Movement(
     @PrimaryKey val id: String,
@@ -26,5 +26,6 @@ data class Movement(
     val referenceId: String?,
     val createdAt: Long = System.currentTimeMillis(),
     val deviceId: String = "",
-    val synced: Boolean = false
+    val synced: Boolean = false,
+    val businessId: String = ""
 )

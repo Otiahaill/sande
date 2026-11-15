@@ -68,11 +68,11 @@ class SalesViewModel(
      * Atomically records a complete sale: creates SaleHeader + all SALE movements + Outbox entry
      * in one Room transaction. Clears the cart on success.
      */
-    suspend fun recordSale() {
+    suspend fun recordSale(businessId: String) {
         val items = _cart.value
         if (items.isEmpty()) return
 
-        val receiptNumber = saleHeaderRepository.generateReceiptNumber("SAL", "DEV")
+        val receiptNumber = saleHeaderRepository.generateReceiptNumber("SAL", businessId)
         val saleLineItems = items.map { line ->
             com.example.sande.data.repository.SaleLineItem(
                 productId = line.productId,
@@ -80,7 +80,7 @@ class SalesViewModel(
                 unitPriceCents = line.unitPriceCents
             )
         }
-        movementRepository.recordSaleAtomic(saleLineItems, receiptNumber, "local")
+        movementRepository.recordSaleAtomic(saleLineItems, receiptNumber, businessId, "local")
 
         _cart.value = emptyList()
     }

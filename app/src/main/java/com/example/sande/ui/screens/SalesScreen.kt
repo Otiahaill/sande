@@ -118,7 +118,7 @@ fun SalesScreen(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Total KES ${formatKes(vm.subtotalCents(cart))}", style = MaterialTheme.typography.titleMedium)
-            Button(onClick = { scope.launch { vm.recordSale() } }, enabled = cart.isNotEmpty()) { Text("Record sale") }
+            Button(onClick = { scope.launch { vm.recordSale("default-business") } }, enabled = cart.isNotEmpty()) { Text("Record sale") }
         }
     }
 }

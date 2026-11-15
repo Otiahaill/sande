@@ -12,14 +12,14 @@ interface SaleHeaderDao {
     @Query("SELECT * FROM sale_headers ORDER BY createdAt DESC")
     fun getAll(): Flow<List<SaleHeader>>
 
-    @Query("SELECT COUNT(*) FROM sale_headers")
-    suspend fun countAll(): Int
+    @Query("SELECT * FROM sale_headers WHERE businessId = :businessId ORDER BY createdAt DESC")
+    fun getByBusiness(businessId: String): Flow<List<SaleHeader>>
 
     @Query("SELECT * FROM sale_headers WHERE id = :id")
     suspend fun getById(id: String): SaleHeader?
 
-    @Query("SELECT * FROM sale_headers WHERE synced = 0 ORDER BY createdAt ASC LIMIT :limit")
-    fun getUnsynced(limit: Int): Flow<List<SaleHeader>>
+    @Query("SELECT COUNT(*) FROM sale_headers")
+    suspend fun countAll(): Int
 
     @Query("UPDATE sale_headers SET synced = 1 WHERE id IN (:ids)")
     suspend fun markSynced(ids: List<String>)

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Error><Code>AuthenticationFailed</Code><Message>Server failed to authenticate the request. Make sure the value of Authorization header is formed correctly including the signature.
+RequestId:4423f90e-301e-00b4-659a-74cec4000000
+Time:2026-11-15T00:42:45.0999507Z</Message><AuthenticationErrorDetail>Signature did not match. String to sign used was r
+2026-11-14T20:40:57Z
+2026-11-15T00:52:28Z
+/blob/productionresultssa17/actions-results/5ed41f72-7fbc-8b3f-9bf2-bcad0c583f09/workflow-job-run-a287f26d-5c75-5d4c-8fa6-82f04c546bbe/artifacts/2a8fdd02611919be3c01c132ddba77affc309a5e0ea7265f1da834a12667d830.zip
+ca7593d4-ee42-46cdXXXXXXXXXXXXXXXXXX
+398a6654-997b-47e9-b12b-9515b896b4de
+2026-11-15T00:05:28Z
+2026-11-15T02:03:51Z
+b
+2025-11-05
+
+
+
+
+
+
+https
+2025-11-05
+b
+
+
+
+attachment; filename="sande-debug-apk.zip"
+
+
+application/zip</AuthenticationErrorDetail></Error>

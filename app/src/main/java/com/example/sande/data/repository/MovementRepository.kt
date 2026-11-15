@@ -63,12 +63,14 @@ class MovementRepository constructor(
     suspend fun recordSaleAtomic(
         items: List<SaleLineItem>,
         receiptNumber: String,
+        businessId: String,
         deviceId: String
     ): String = database.withTransaction {
         val totalCents = items.sumOf { it.quantity * it.unitPriceCents }
         val saleHeaderId = UUID.randomUUID().toString()
         val saleHeader = SaleHeader(
             id = saleHeaderId,
+            businessId = businessId,
             receiptNumber = receiptNumber,
             totalCents = totalCents,
             deviceId = deviceId,
@@ -87,7 +89,8 @@ class MovementRepository constructor(
                     unitPriceCents = line.unitPriceCents,
                     referenceId = referenceId,
                     deviceId = deviceId,
-                    synced = false
+                    synced = false,
+                    businessId = businessId
                 )
             )
         }

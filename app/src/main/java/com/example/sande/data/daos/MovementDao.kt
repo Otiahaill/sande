@@ -16,6 +16,9 @@ interface MovementDao {
     @Query("SELECT * FROM movements WHERE productId = :productId ORDER BY createdAt DESC")
     fun getByProduct(productId: String): Flow<List<Movement>>
 
+    @Query("SELECT * FROM movements WHERE businessId = :businessId ORDER BY createdAt DESC")
+    fun getByBusiness(businessId: String): Flow<List<Movement>>
+
     @Query("SELECT * FROM movements ORDER BY createdAt DESC")
     fun getAll(): Flow<List<Movement>>
 
