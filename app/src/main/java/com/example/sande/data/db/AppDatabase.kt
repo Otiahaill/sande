@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.sande.data.daos.MemberDao
 import com.example.sande.data.daos.MovementDao
 import com.example.sande.data.daos.OutboxDao
+import com.example.sande.data.daos.ProductCategoryDao
 import com.example.sande.data.daos.ProductDao
 import com.example.sande.data.daos.SaleHeaderDao
 import com.example.sande.data.entities.Business
@@ -14,6 +15,7 @@ import com.example.sande.data.entities.Member
 import com.example.sande.data.entities.Movement
 import com.example.sande.data.entities.Outbox
 import com.example.sande.data.entities.Product
+import com.example.sande.data.entities.ProductCategory
 import com.example.sande.data.entities.SaleHeader
 
 @Database(
@@ -21,6 +23,7 @@ import com.example.sande.data.entities.SaleHeader
         Business::class,
         Member::class,
         Product::class,
+        ProductCategory::class,
         Movement::class,
         Outbox::class,
         SaleHeader::class
@@ -34,6 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun outboxDao(): OutboxDao
     abstract fun memberDao(): MemberDao
     abstract fun saleHeaderDao(): SaleHeaderDao
+    abstract fun productCategoryDao(): ProductCategoryDao
 
     companion object {
         @Volatile private var INSTANCE: AppDatabase? = null
