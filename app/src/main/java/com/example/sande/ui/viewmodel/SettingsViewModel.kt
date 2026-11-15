@@ -1,14 +1,15 @@
 package com.example.sande.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.sande.data.repository.AuthRepository
+import com.example.sande.domain.PermissionPolicy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val permissionPolicy: PermissionPolicy
 ) : ViewModel() {
 
     val currentUser: String? get() = authRepository.currentUser

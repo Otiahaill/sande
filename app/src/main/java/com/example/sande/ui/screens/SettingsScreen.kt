@@ -1,119 +1,248 @@
 package com.example.sande.ui.screens
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sande.di.SandeApplication
 import com.example.sande.ui.theme.SandeShape
 import com.example.sande.ui.viewModelFactoryOf
 import com.example.sande.ui.viewmodel.SettingsViewModel
+import androidx.compose.ui.platform.LocalContext
 
 @Composable
-fun SettingsScreen(onSignedOut: () -> Unit, modifier: Modifier = Modifier) {
-    val app = LocalContext.current.applicationContext as SandeApplication
+fun SettingsScreen(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val app = context.applicationContext as SandeApplication
     val vm: SettingsViewModel = viewModel(
         factory = viewModelFactoryOf { SettingsViewModel(app.authRepository) }
     )
     val negativeStockPolicy by vm.negativeStockPolicy.collectAsState()
-    val policies = listOf("WARN", "BLOCK", "ALLOW")
 
-    Column(
-        modifier = modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        Text("Settings", style = MaterialTheme.typography.headlineSmall)
+    SandeTheme {
+        Scaffold(
+            topBar = {
+                androidx.compose.material3.TopAppBar(
+                    title = { Text(text = "Settings") },
+                    colors = androidx.compose.material3.TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.surface,
+                        titleContentColor = MaterialTheme.colorScheme.onSurface
+                    )
+                )
+            }
+        ) { innerPadding ->
+            Column(
+                modifier = modifier.fillMaxSize().padding(innerPadding)
+            ) {
+                Text(
+                    text = "Settings",
+                    style = MaterialTheme.typography.headlineSmall,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Spacer(modifier = Modifier.height(16.dp))
 
-        SettingsCard("Account") {
-            Text("Signed in as", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text(vm.currentUser ?: "not signed in", style = MaterialTheme.typography.bodyLarge)
-        }
-
-        SettingsCard("App") {
-            Text("Version", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            Text("1.0.0", style = MaterialTheme.typography.bodyLarge)
-        }
-
-        SettingsCard("Negative stock policy") {
-            Text(
-                "What happens when a sale would make stock negative?",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            policies.forEach { policy ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .selectable(
-                            selected = negativeStockPolicy == policy,
-                            onClick = { vm.setNegativeStockPolicy(policy) }
-                        ),
-                    verticalAlignment = Alignment.CenterVertically
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = SandeShape.card,
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.outlineVariant
+                    )
                 ) {
-                    RadioButton(selected = negativeStockPolicy == policy, onClick = { vm.setNegativeStockPolicy(policy) })
-                    Column {
-                        Text(policy, style = MaterialTheme.typography.bodyLarge)
+                    Column(modifier = Modifier.padding(16.dp)) {
                         Text(
-                            policyDescription(policy),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            text = "Account",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        ListItem(
+                            headlineText = { Text(text = "Signed in as") },
+                            supportingText = { Text(text = vm.currentUser ?: "Unknown") },
+                            leadingContent = {
+                                Icon(
+                                    icon = Icons.Default.Person,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary
+                                )
+                            }
                         )
                     }
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = SandeShape.card,
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.outlineVariant
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "App",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        ListItem(
+                            headlineText = { Text(text = "Version") },
+                            supportingText = { Text(text = "1.0.0") },
+                            leadingContent = {
+                                Icon(
+                                    icon = Icons.Default.Info,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        )
+                        DividerItem()
+                        ListItem(
+                            headlineText = { Text(text = "Terms of Service") },
+                            leadingContent = {
+                                Icon(
+                                    icon = Icons.Default.Description,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        )
+                        DividerItem()
+                        ListItem(
+                            headlineText = { Text(text = "Privacy Policy") },
+                            leadingContent = {
+                                Icon(
+                                    icon = Icons.Default.PrivacyTip,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = SandeShape.card,
+                    colors = androidx.compose.material3.CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surface
+                    ),
+                    border = androidx.compose.foundation.BorderStroke(
+                        0.5.dp,
+                        MaterialTheme.colorScheme.outlineVariant
+                    )
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "Negative Stock Policy",
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Text(
+                            text = "What happens when a sale exceeds available stock?",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        ListItem(
+                            headlineText = { Text(text = "WARN") },
+                            supportingText = { Text(text = "Allow sale with a warning alert") },
+                            trailingContent = {
+                                RadioButton(
+                                    selected = negativeStockPolicy == "WARN",
+                                    onClick = { vm.setNegativeStockPolicy("WARN") },
+                                    colors = androidx.compose.material3.RadioButtonDefaults.colors(
+                                        selectedColor = MaterialTheme.colorScheme.primary,
+                                        unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                            }
+                        )
+                        DividerItem()
+                        ListItem(
+                            headlineText = { Text(text = "BLOCK") },
+                            supportingText = { Text(text = "Prevent sale if stock would go negative") },
+                            trailingContent = {
+                                RadioButton(
+                                    selected = negativeStockPolicy == "BLOCK",
+                                    onClick = { vm.setNegativeStockPolicy("BLOCK") },
+                                    colors = androidx.compose.material3.RadioButtonDefaults.colors(
+                                        selectedColor = MaterialTheme.colorScheme.primary,
+                                        unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                            }
+                        )
+                        DividerItem()
+                        ListItem(
+                            headlineText = { Text(text = "ALLOW") },
+                            supportingText = { Text(text = "Allow sale without any warning") },
+                            trailingContent = {
+                                RadioButton(
+                                    selected = negativeStockPolicy == "ALLOW",
+                                    onClick = { vm.setNegativeStockPolicy("ALLOW") },
+                                    colors = androidx.compose.material3.RadioButtonDefaults.colors(
+                                        selectedColor = MaterialTheme.colorScheme.primary,
+                                        unselectedColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                            }
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                Button(
+                    onClick = {
+                        vm.signOut()
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error,
+                        contentColor = MaterialTheme.colorScheme.onError
+                    )
+                ) {
+                    Text(text = "Sign Out")
+                }
             }
         }
-
-        Button(
-            onClick = {
-                vm.signOut()
-                onSignedOut()
-            },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.error,
-                contentColor = MaterialTheme.colorScheme.onError
-            )
-        ) { Text("Sign out") }
     }
 }
 
+/**
+ * Simple Spacer wrapper
+ */
 @Composable
-private fun SettingsCard(title: String, content: @Composable () -> Unit) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = SandeShape.card,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium)
-            content()
-        }
-    }
-}
-
-private fun policyDescription(policy: String): String = when (policy) {
-    "WARN" -> "Allow sale with a warning alert"
-    "BLOCK" -> "Prevent sale if stock would go negative"
-    "ALLOW" -> "Allow sale without any warning"
-    else -> ""
+private fun Spacer(modifier: Modifier = Modifier) {
+    androidx.compose.foundation.layout.Spacer(modifier = modifier)
 }
