@@ -49,13 +49,14 @@ class ProductFormViewModel(
     val isFormValid: Boolean
         get() = _name.value.isNotBlank() && _priceCentsStr.value.isNotBlank() && _priceCentsStr.value.toLongOrNull() != null
 
-    fun saveProduct() {
+    fun saveProduct(businessId: String) {
         if (!isFormValid) return
 
         viewModelScope.launch {
             val priceCents = _priceCentsStr.value.toLongOrNull() ?: 0L
             val product = Product(
                 id = productToEdit?.id ?: UUID.randomUUID().toString(),
+                businessId = businessId,
                 name = _name.value,
                 sku = _sku.value.takeIf { it.isNotBlank() },
                 category = _category.value.takeIf { it.isNotBlank() },

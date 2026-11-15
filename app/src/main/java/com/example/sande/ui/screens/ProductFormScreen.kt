@@ -27,6 +27,7 @@ import com.example.sande.ui.viewmodel.ProductFormViewModel
 fun ProductFormScreen(
     modifier: Modifier = Modifier,
     productToEdit: Product? = null,
+    businessId: String = "default-business",
     onProductSaved: () -> Unit = {}
 ) {
     val app = LocalContext.current.applicationContext as SandeApplication
@@ -79,7 +80,7 @@ fun ProductFormScreen(
         )
         Button(
             onClick = {
-                vm.saveProduct()
+                vm.saveProduct(businessId)
                 onProductSaved()
             },
             enabled = name.isNotBlank() && priceCentsStr.toLongOrNull() != null,
