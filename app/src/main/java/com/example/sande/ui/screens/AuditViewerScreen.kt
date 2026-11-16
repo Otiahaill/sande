@@ -87,7 +87,7 @@ fun AuditViewerScreen(
                     )
                 } else {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier.fillMaxWidth(),
                         contentPadding = PaddingValues(top = 8.dp)
                     ) {
                         items(movements, key = { it.id }) { m ->

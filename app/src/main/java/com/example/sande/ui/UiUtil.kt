@@ -2,10 +2,17 @@ package com.example.sande.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -55,4 +62,34 @@ fun formatSaleDate(timestamp: Long): String {
         java.time.ZoneId.systemDefault()
     )
     return "${dt.dayOfMonth} ${dt.month.name.take(3)} ${dt.hour}:${dt.minute.toString().padStart(2, '0')}"
+}
+
+/**
+ * Page header with a drawer button on the left, used by screens that do not
+ * have their own top app bar. Pass [onBack] to show a back arrow instead.
+ */
+@Composable
+fun ScreenHeader(
+    title: String,
+    onOpenDrawer: () -> Unit,
+    modifier: Modifier = Modifier,
+    onBack: (() -> Unit)? = null
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = { if (onBack != null) onBack() else onOpenDrawer() }) {
+            Icon(
+                imageVector = if (onBack != null) Icons.Default.ArrowBack else Icons.Default.Menu,
+                contentDescription = if (onBack != null) "Back" else "Open navigation menu",
+                tint = MaterialTheme.colorScheme.onSurface
+            )
+        }
+        Text(
+            text = title,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+    }
 }
