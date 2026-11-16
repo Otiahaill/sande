@@ -1,17 +1,28 @@
 package com.example.sande.ui.screens
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.PersonAdd
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Icons
-import androidx.compose.material3.ImageVector
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -20,17 +31,23 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sande.di.SandeApplication
-import com.example.sande.ui.EmptyStateCard
+import com.example.sande.ui.ScreenHeader
 import com.example.sande.ui.theme.SandeShape
+import com.example.sande.ui.theme.SandeTheme
 import com.example.sande.ui.viewModelFactoryOf
 import com.example.sande.ui.viewmodel.MemberListViewModel
-import androidx.compose.ui.platform.LocalContext
+import java.util.Locale
 
 @Composable
-fun MemberListScreen(modifier: Modifier = Modifier) {
+fun MemberListScreen(
+    modifier: Modifier = Modifier,
+    onOpenDrawer: () -> Unit = {},
+    onAddMember: () -> Unit = {}
+) {
     val context = LocalContext.current
     val app = context.applicationContext as SandeApplication
     val vm: MemberListViewModel = viewModel(
@@ -42,7 +59,7 @@ fun MemberListScreen(modifier: Modifier = Modifier) {
         Scaffold(
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick = { /* add member */ },
+                    onClick = onAddMember,
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary,
                     shape = RoundedCornerShape(12.dp)
@@ -56,33 +73,29 @@ fun MemberListScreen(modifier: Modifier = Modifier) {
             }
         ) { innerPadding ->
             Column(
-                modifier = modifier.fillMaxSize().padding(innerPadding)
+                modifier = modifier.fillMaxSize().padding(innerPadding).padding(16.dp)
             ) {
-                Text(
-                    text = "Members",
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(16.dp))
+                ScreenHeader(title = "Members", onOpenDrawer = onOpenDrawer)
                 if (members.isEmpty()) {
-                    EmptyStateCard(
-                        title = "No members yet",
-                        subtitle = "Add members to manage access",
-                        icon = Icons.Default.PersonAdd
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "No members yet",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = androidx.compose.foundation.layout.PaddingValues(top = 8.dp)
+                        contentPadding = PaddingValues(top = 8.dp)
                     ) {
                         items(members, key = { it.uid }) { member ->
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = SandeShape.card,
-                                colors = androidx.compose.material3.CardDefaults.cardColors(
+                                colors = CardDefaults.cardColors(
                                     containerColor = MaterialTheme.colorScheme.surface
                                 ),
-                                border = androidx.compose.foundation.BorderStroke(
+                                border = BorderStroke(
                                     0.5.dp,
                                     MaterialTheme.colorScheme.outlineVariant
                                 )
@@ -114,16 +127,21 @@ fun MemberListScreen(modifier: Modifier = Modifier) {
                                     }
                                     Spacer(modifier = Modifier.width(16.dp))
                                     Box(
-                                        modifier = Modifier.width(72.dp).height(24.dp).background(
-                                            color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                                            shape = RoundedCornerShape(12.dp)
-                                        )
+                                        modifier = Modifier
+                                            .width(72.dp)
+                                            .height(24.dp)
+                                            .background(
+                                                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                                                shape = RoundedCornerShape(12.dp)
+                                            ),
+                                        contentAlignment = Alignment.Center
                                     ) {
                                         Text(
-                                            text = member.role.capitalize(),
+                                            text = member.role.lowercase().replaceFirstChar {
+                                                if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                            },
                                             style = MaterialTheme.typography.labelSmall,
-                                            color = MaterialTheme.colorScheme.primary,
-                                            modifier = Modifier.align(Alignment.Center)
+                                            color = MaterialTheme.colorScheme.primary
                                         )
                                     }
                                 }
@@ -134,12 +152,4 @@ fun MemberListScreen(modifier: Modifier = Modifier) {
             }
         }
     }
-}
-
-/**
- * Simple Spacer wrapper
- */
-@Composable
-private fun Spacer(modifier: Modifier = Modifier) {
-    androidx.compose.foundation.layout.Spacer(modifier = modifier)
 }

@@ -1,6 +1,7 @@
 package com.example.sande.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.sande.data.repository.AuthRepository
 import com.example.sande.domain.PermissionPolicy
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,6 +14,8 @@ class SettingsViewModel(
 ) : ViewModel() {
 
     val currentUser: String? get() = authRepository.currentUser
+    val currentUserEmail: String? get() = authRepository.currentUserEmail
+    val currentUserRole: String? get() = authRepository.currentUserRole
     val isSignedIn: Boolean get() = authRepository.isSignedIn
 
     private val _negativeStockPolicy = MutableStateFlow("WARN")

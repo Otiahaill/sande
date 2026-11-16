@@ -6,6 +6,7 @@ import com.example.sande.data.entities.Product
 import com.example.sande.data.repository.MovementRepository
 import com.example.sande.data.repository.ProductRepository
 import com.example.sande.data.repository.SaleHeaderRepository
+import com.example.sande.data.repository.SaleLineItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -29,7 +30,7 @@ class SalesViewModel(
     )
 
     val products: StateFlow<List<Product>> =
-        productRepository.getAllActive.stateIn(
+        productRepository.getAllActiveByBusiness("default-business").stateIn(
             viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList()
         )
 
@@ -65,22 +66,22 @@ class SalesViewModel(
     fun subtotalCents(items: List<CartItem>): Long = items.sumOf { it.quantity * it.unitPriceCents }
 
     /**
-     * Atomically records a complete sale: creates SaleHeader + all SALE movements + Outbox entry
+     * Atomically records a complete sale: creates SaleHeader + all SALE movements
      * in one Room transaction. Clears the cart on success.
      */
-    suspend fun recordSale(businessId: String) {
+    suspend fun recordSale(businessId: String, salespersonId: String, salespersonRole: String) {
         val items = _cart.value
         if (items.isEmpty()) return
 
         val receiptNumber = saleHeaderRepository.generateReceiptNumber("SAL", businessId)
         val saleLineItems = items.map { line ->
-            com.example.sande.data.repository.SaleLineItem(
+            SaleLineItem(
                 productId = line.productId,
                 quantity = line.quantity,
                 unitPriceCents = line.unitPriceCents
             )
         }
-        movementRepository.recordSaleAtomic(saleLineItems, receiptNumber, businessId, "local")
+        movementRepository.recordSaleAtomic(saleLineItems, receiptNumber, businessId, "local", salespersonId, salespersonRole)
 
         _cart.value = emptyList()
     }

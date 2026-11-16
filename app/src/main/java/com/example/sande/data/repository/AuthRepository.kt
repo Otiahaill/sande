@@ -11,13 +11,25 @@ class AuthRepository {
     private val _session = MutableStateFlow<Session?>(null)
     val session: StateFlow<Session?> = _session.asStateFlow()
 
-    data class Session(val uid: String, val email: String?, val idToken: String?)
+    data class Session(
+        val uid: String,
+        val email: String?,
+        val idToken: String?,
+        val role: String = "OWNER",  // "OWNER" or "SALESPERSON"
+        val businessId: String = "default-business"
+    )
 
     suspend fun signIn(email: String, password: String): Session {
-        // TODO: Replace with Firebase Auth integration
-        // Firebase Auth integration is deferred per directive #14 - implemented as FINAL stage
-        Thread.sleep(600)
-        val session = Session(uid = "dev-uid-001", email = email, idToken = "mock-id-token")
+        // Local-first auth - in production would validate against local user store
+        // For demo, accept any email/password and assign role based on email
+        val role = if (email.contains("owner", ignoreCase = true)) "OWNER" else "SALESPERSON"
+        val session = Session(
+            uid = "dev-uid-001",
+            email = email,
+            idToken = "mock-id-token",
+            role = role,
+            businessId = "default-business"
+        )
         _session.update { session }
         return session
     }
@@ -27,5 +39,7 @@ class AuthRepository {
     }
 
     val currentUser: String? get() = _session.value?.uid
+    val currentUserRole: String? get() = _session.value?.role
+    val currentUserEmail: String? get() = _session.value?.email
     val isSignedIn: Boolean get() = _session.value != null
 }

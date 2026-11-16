@@ -65,3 +65,6 @@ cxx/
 
 # Keep Gradle wrapper JAR (needed for CI builds)
 !gradle/wrapper/gradle-wrapper.jar
+
+# Firebase functions
+functions/node_modules/
