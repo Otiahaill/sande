@@ -32,7 +32,14 @@ import com.example.sande.ui.theme.SandeTheme
 import com.example.sande.ui.viewModelFactoryOf
 import com.example.sande.ui.viewmodel.StockViewModel
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Icon
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReceiveStockScreen(
     modifier: Modifier = Modifier,
@@ -57,7 +64,7 @@ fun ReceiveStockScreen(
                     navigationIcon = {
                         IconButton(onClick = { onReceived() }) {
                             Icon(
-                                imageVector = androidx.compose.material.icons.Icons.Default.Menu,
+                                imageVector = Icons.Default.Menu,
                                 contentDescription = "Back"
                             )
                         }

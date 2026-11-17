@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
@@ -37,7 +38,7 @@ data class SalespersonSummary(
 
 @Serializable
 data class DailyReport(
-    val date: LocalDate,
+    val date: String,
     val salesCount: Int,
     val totalRevenueCents: Long,
     val itemsSold: Long,
@@ -47,8 +48,8 @@ data class DailyReport(
 
 @Serializable
 data class PeriodReport(
-    val startDate: LocalDate,
-    val endDate: LocalDate,
+    val startDate: String,
+    val endDate: String,
     val totalSales: Int,
     val totalRevenueCents: Long,
     val totalItemsSold: Long,
@@ -83,8 +84,8 @@ class ReportsViewModel(
     ) { sales, movements, periodType, customStart, customEnd ->
         generatePeriodReport(sales, movements, periodType, customStart, customEnd)
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), PeriodReport(
-        startDate = java.time.LocalDate.now(),
-        endDate = java.time.LocalDate.now(),
+        startDate = java.time.LocalDate.now().toString(),
+        endDate = java.time.LocalDate.now().toString(),
         totalSales = 0,
         totalRevenueCents = 0,
         totalItemsSold = 0,
@@ -127,7 +128,7 @@ class ReportsViewModel(
                 java.time.Instant.ofEpochMilli(sale.createdAt),
                 java.time.ZoneId.systemDefault()
             )
-            saleDate !< startDate && saleDate !> endDate && sale.status == "completed"
+            saleDate >= startDate && saleDate <= endDate && sale.status == "completed"
         }
 
         val filteredMovements = movements.filter { movement ->
@@ -135,7 +136,7 @@ class ReportsViewModel(
                 java.time.Instant.ofEpochMilli(movement.createdAt),
                 java.time.ZoneId.systemDefault()
             )
-            movementDate !< startDate && movementDate !> endDate && movement.type == com.example.sande.data.entities.MovementType.SALE
+            movementDate >= startDate && movementDate <= endDate && movement.type == com.example.sande.data.entities.MovementType.SALE
         }
 
         val dailyReports = buildDailyReports(startDate, endDate, filteredSales, filteredMovements)
@@ -146,8 +147,8 @@ class ReportsViewModel(
         val averageTicketCents = if (totalSales > 0) totalRevenueCents / totalSales else 0L
 
         return PeriodReport(
-            startDate = startDate,
-            endDate = endDate,
+            startDate = startDate.toString(),
+            endDate = endDate.toString(),
             totalSales = totalSales,
             totalRevenueCents = totalRevenueCents,
             totalItemsSold = totalItemsSold,
@@ -213,7 +214,7 @@ class ReportsViewModel(
                 }.sortedByDescending { it.revenueCents }
 
             DailyReport(
-                date = date,
+                date = date.toString(),
                 salesCount = daySales.size,
                 totalRevenueCents = daySales.sumOf { it.totalCents },
                 itemsSold = dayMovements.sumOf { it.quantity },
@@ -234,6 +235,6 @@ class ReportsViewModel(
     }
 
     suspend fun exportReportJson(report: PeriodReport): String {
-        return kotlinx.serialization.json.Json.encodeToString(report)
+        return Json.encodeToString(report)
     }
 }
