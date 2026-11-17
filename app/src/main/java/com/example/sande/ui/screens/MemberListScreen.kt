@@ -24,6 +24,7 @@ import androidx.compose.material3.Badge
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -49,7 +50,8 @@ import java.util.Locale
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,24 +73,10 @@ fun MemberListScreen(
                 TopAppBar(
                     title = { Text(text = "Members") },
                     navigationIcon = {
-                        IconButton(onClick = onOpenDrawer) {
+                        androidx.compose.material3.IconButton(onClick = onOpenDrawer) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
                                 contentDescription = "Open menu"
-                            )
-                        }
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = onAddMember,
-                            containerColor = MaterialTheme.colorScheme.primary,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                            shape = RoundedCornerShape(12.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PersonAdd,
-                                contentDescription = "Add member",
-                                tint = MaterialTheme.colorScheme.onPrimary
                             )
                         }
                     },
@@ -97,6 +85,20 @@ fun MemberListScreen(
                         titleContentColor = MaterialTheme.colorScheme.onSurface
                     )
                 )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = onAddMember,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.PersonAdd,
+                        contentDescription = "Add member",
+                        tint = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         ) { innerPadding ->
             Column(

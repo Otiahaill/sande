@@ -40,9 +40,6 @@ import com.example.sande.ui.theme.SandeShape
 import com.example.sande.ui.theme.SandeTheme
 import com.example.sande.ui.viewModelFactoryOf
 import com.example.sande.ui.viewmodel.AuditViewerViewModel
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.icons.Icons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,7 +60,7 @@ fun AuditViewerScreen(
                 TopAppBar(
                     title = { Text(text = "Audit Viewer") },
                     navigationIcon = {
-                        IconButton(onClick = onOpenDrawer) {
+                        androidx.compose.material3.IconButton(onClick = onOpenDrawer) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
                                 contentDescription = "Open menu"
