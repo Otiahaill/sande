@@ -168,7 +168,7 @@ fun ReportsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         contentPadding = PaddingValues(top = 8.dp)
                     ) {
-                        androidx.compose.foundation.lazy.items(report.dailyBreakdown) { day ->
+                        items(report.dailyBreakdown) { day ->
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
@@ -258,7 +258,7 @@ private fun SummaryCard(
     color: androidx.compose.ui.graphics.Color
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().weight(1f),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f))
     ) {
