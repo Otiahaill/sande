@@ -18,7 +18,6 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 
 @Serializable
 data class ProductSales(
@@ -93,10 +92,6 @@ class ReportsViewModel(
         dailyBreakdown = emptyList()
     ))
 
-    enum class PeriodType {
-        TODAY, YESTERDAY, LAST_7_DAYS, LAST_30_DAYS, CUSTOM
-    }
-
     fun setPeriod(period: PeriodType) {
         _selectedPeriod.value = period
     }
@@ -115,7 +110,7 @@ class ReportsViewModel(
         customEnd: java.time.LocalDate?
     ): PeriodReport {
         val now = java.time.LocalDate.now(java.time.ZoneId.systemDefault())
-        val (startDate, endDate) = when (periodType) {
+        val (startDate, endDate) = when (_selectedPeriod.value) {
             PeriodType.TODAY -> now to now
             PeriodType.YESTERDAY -> now.minusDays(1) to now.minusDays(1)
             PeriodType.LAST_7_DAYS -> now.minusDays(6) to now

@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -66,7 +64,7 @@ fun AuditViewerScreen(
                     navigationIcon = {
                         IconButton(onClick = onOpenDrawer) {
                             Icon(
-                                imageVector = Icons.Default.Menu,
+                                imageVector = androidx.compose.material.icons.Icons.Default.Menu,
                                 contentDescription = "Open menu"
                             )
                         }
@@ -111,7 +109,7 @@ fun AuditViewerScreen(
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Default.History,
+                                        imageVector = androidx.compose.material.icons.Icons.Default.History,
                                         contentDescription = null,
                                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                         modifier = Modifier.size(24.dp)

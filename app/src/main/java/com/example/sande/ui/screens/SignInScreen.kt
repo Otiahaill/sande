@@ -66,6 +66,7 @@ fun SignInScreen(onSignedIn: () -> Unit) {
                 value = email,
                 onValueChange = { email = it },
                 label = { Text(text = "Email") },
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth().width(320.dp),
                 shape = RoundedCornerShape(10.dp)
             )
@@ -75,6 +76,7 @@ fun SignInScreen(onSignedIn: () -> Unit) {
                 onValueChange = { password = it },
                 label = { Text(text = "Password") },
                 visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
                 modifier = Modifier.fillMaxWidth().width(320.dp),
                 shape = RoundedCornerShape(10.dp)
             )
