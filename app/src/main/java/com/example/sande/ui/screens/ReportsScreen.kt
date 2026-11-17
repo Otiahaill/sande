@@ -258,7 +258,7 @@ private fun SummaryCard(
     color: androidx.compose.ui.graphics.Color
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth().weight(1f),
+        modifier = Modifier.weight(1f).fillMaxWidth(),
         shape = androidx.compose.foundation.shape.RoundedCornerShape(12.dp),
         colors = CardDefaults.cardColors(containerColor = color.copy(alpha = 0.1f))
     ) {
