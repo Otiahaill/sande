@@ -230,6 +230,6 @@ class ReportsViewModel(
     }
 
     suspend fun exportReportJson(report: PeriodReport): String {
-        return Json.encodeToString(report)
+        return Json.encodeToString(PeriodReport.serializer(), report)
     }
 }

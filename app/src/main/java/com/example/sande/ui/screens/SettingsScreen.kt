@@ -40,6 +40,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.sande.data.repository.AuthRepository
+import com.example.sande.di.SandeApplication
 import com.example.sande.domain.PermissionPolicy
 import com.example.sande.ui.ScreenHeader
 import com.example.sande.ui.theme.SandeTheme
